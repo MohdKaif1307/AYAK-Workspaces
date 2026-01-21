@@ -56,6 +56,17 @@ export const inquiries = pgTable("inquiries", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").unique().notNull(),
+  content: text("content").notNull(),
+  excerpt: text("excerpt"),
+  imageUrl: text("image_url"),
+  author: text("author").notNull(),
+  publishedAt: timestamp("published_at").defaultNow(),
+});
+
 // RELATIONS
 export const productsRelations = relations(products, ({ one }) => ({
   category: one(categories, {
@@ -93,6 +104,7 @@ export const insertCategorySchema = createInsertSchema(categories).omit({ id: tr
 export const insertQuoteSchema = createInsertSchema(quotes).omit({ id: true, createdAt: true, status: true });
 export const insertQuoteItemSchema = createInsertSchema(quoteItems).omit({ id: true });
 export const insertInquirySchema = createInsertSchema(inquiries).omit({ id: true, createdAt: true });
+export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({ id: true });
 
 // TYPES
 export type Product = typeof products.$inferSelect;
@@ -100,6 +112,7 @@ export type Category = typeof categories.$inferSelect;
 export type Quote = typeof quotes.$inferSelect;
 export type QuoteItem = typeof quoteItems.$inferSelect;
 export type Inquiry = typeof inquiries.$inferSelect;
+export type BlogPost = typeof blogPosts.$inferSelect;
 
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type InsertQuoteItem = z.infer<typeof insertQuoteItemSchema>;

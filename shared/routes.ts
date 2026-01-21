@@ -8,7 +8,8 @@ import {
   categories, 
   quotes, 
   quoteItems, 
-  inquiries 
+  inquiries,
+  blogPosts
 } from './schema';
 
 export const errorSchemas = {
@@ -30,7 +31,7 @@ export const api = {
       method: 'GET' as const,
       path: '/api/products',
       input: z.object({
-        categoryId: z.string().optional(), // sending as string query param
+        categoryId: z.string().optional(), 
         search: z.string().optional(),
       }).optional(),
       responses: {
@@ -43,15 +44,6 @@ export const api = {
       responses: {
         200: z.custom<typeof products.$inferSelect>(),
         404: errorSchemas.notFound,
-      },
-    },
-    create: {
-      method: 'POST' as const,
-      path: '/api/products',
-      input: insertProductSchema,
-      responses: {
-        201: z.custom<typeof products.$inferSelect>(),
-        400: errorSchemas.validation,
       },
     },
   },
@@ -68,7 +60,6 @@ export const api = {
     create: {
       method: 'POST' as const,
       path: '/api/quotes',
-      // We expect a list of items and potentially user info if not logged in (though we'll assume logged in or guest session for now)
       input: z.object({
         items: z.array(z.object({
           productId: z.number(),
@@ -81,19 +72,11 @@ export const api = {
         400: errorSchemas.validation,
       },
     },
-    list: { // User's quotes
+    list: { 
       method: 'GET' as const,
       path: '/api/quotes',
       responses: {
         200: z.array(z.custom<typeof quotes.$inferSelect>()),
-      },
-    },
-    get: {
-      method: 'GET' as const,
-      path: '/api/quotes/:id',
-      responses: {
-        200: z.custom<typeof quotes.$inferSelect>(), // Simplification: in real app, would include items
-        404: errorSchemas.notFound,
       },
     },
   },
@@ -108,6 +91,23 @@ export const api = {
       },
     },
   },
+  blog: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/blog',
+      responses: {
+        200: z.array(z.custom<typeof blogPosts.$inferSelect>()),
+      },
+    },
+    get: {
+      method: 'GET' as const,
+      path: '/api/blog/:slug',
+      responses: {
+        200: z.custom<typeof blogPosts.$inferSelect>(),
+        404: errorSchemas.notFound,
+      },
+    },
+  }
 };
 
 export function buildUrl(path: string, params?: Record<string, string | number>): string {

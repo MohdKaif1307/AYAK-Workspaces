@@ -1,10 +1,11 @@
 import { 
-  products, categories, quotes, quoteItems, inquiries,
+  products, categories, quotes, quoteItems, inquiries, blogPosts,
   type Product, type InsertProduct,
   type Category, 
   type Quote, 
   type QuoteItem, type InsertQuoteItem,
-  type Inquiry
+  type Inquiry,
+  type BlogPost
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
@@ -19,7 +20,7 @@ export interface IStorage {
   getCategories(): Promise<Category[]>;
   getCategory(id: number): Promise<Category | undefined>;
   getCategoryBySlug(slug: string): Promise<Category | undefined>;
-  createCategory(category: Category): Promise<Category>; // Seed mainly
+  createCategory(category: Category): Promise<Category>; 
 
   // Quotes
   createQuote(userId: string | null, items: InsertQuoteItem[]): Promise<Quote>;
@@ -28,6 +29,11 @@ export interface IStorage {
 
   // Inquiries
   createInquiry(inquiry: Inquiry): Promise<Inquiry>;
+
+  // Blog
+  getBlogPosts(): Promise<BlogPost[]>;
+  getBlogPostBySlug(slug: string): Promise<BlogPost | undefined>;
+  createBlogPost(post: any): Promise<BlogPost>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -62,19 +68,14 @@ export class DatabaseStorage implements IStorage {
     return category;
   }
 
-  async createCategory(category: Category): Promise<Category> {
+  async createCategory(category: any): Promise<Category> {
     const [newCategory] = await db.insert(categories).values(category).returning();
     return newCategory;
   }
 
   async createQuote(userId: string | null, items: InsertQuoteItem[]): Promise<Quote> {
-    // Start transaction if possible, but for now simple insert
     const [quote] = await db.insert(quotes).values({
-      userId: userId || undefined, // undefined will result in null if allowed, but references enforce strict? userId is nullable in our schema? 
-      // Schema says userId references auth users. If guest, maybe we need to handle differently or require auth.
-      // For now, let's assume we require auth for quotes or handle null userId if we change schema.
-      // My updated schema has userId: text("user_id").references(() => users.id).
-      // If userId is null, it's a guest quote? FK might allow null.
+      userId: userId || undefined,
       status: 'pending'
     }).returning();
 
@@ -100,6 +101,20 @@ export class DatabaseStorage implements IStorage {
   async createInquiry(inquiry: Inquiry): Promise<Inquiry> {
     const [newInquiry] = await db.insert(inquiries).values(inquiry).returning();
     return newInquiry;
+  }
+
+  async getBlogPosts(): Promise<BlogPost[]> {
+    return await db.select().from(blogPosts).orderBy(desc(blogPosts.publishedAt));
+  }
+
+  async getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
+    const [post] = await db.select().from(blogPosts).where(eq(blogPosts.slug, slug));
+    return post;
+  }
+
+  async createBlogPost(post: any): Promise<BlogPost> {
+    const [newPost] = await db.insert(blogPosts).values(post).returning();
+    return newPost;
   }
 }
 
