@@ -8,12 +8,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-sm flex items-center justify-center text-primary-foreground font-display font-bold text-xl">
-                A
-              </div>
-              <span className="font-display font-bold text-2xl tracking-tight">AYAK</span>
-            </Link>
+            <Link href="/" className="flex items-center gap-2 group">
+          <img 
+            src="/images/LOGO.png" 
+            alt="AYAK Logo" 
+            className="h-16 w-auto hover:opacity-80 transition-opacity"
+          />
+        </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Designing workspaces that inspire creativity, enhance productivity, and elevate your corporate identity.
             </p>

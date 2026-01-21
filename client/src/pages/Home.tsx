@@ -92,7 +92,7 @@ export default function Home() {
             >
               <div className="aspect-[4/3] bg-secondary rounded-lg overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2072&auto=format&fit=crop" 
+                  src="/images/featured-section.jpg" 
                   alt="Modern Workspace Design" 
                   className="w-full h-full object-cover"
                 />
@@ -117,9 +117,9 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Executive Desks", img: "https://images.unsplash.com/photo-1593062096033-9a26b09da705?q=80&w=2070&auto=format&fit=crop", link: "/products?category=desks" },
-              { title: "Ergonomic Seating", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop", link: "/products?category=chairs" },
-              { title: "Collaborative Spaces", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop", link: "/products?category=collaborative" }
+              { title: "Executive Desks", img: "/images/category-desks.jpg", link: "/products?category=desks" },
+              { title: "Ergonomic Seating", img: "/images/category-chairs.jpg", link: "/products?category=chairs" },
+              { title: "Collaborative Spaces", img: "/images/category-collaborative.jpg", link: "/products?category=collaborative" }
             ].map((cat, idx) => (
               <Link key={idx} href={cat.link}>
                 <motion.div 
@@ -228,7 +228,7 @@ export default function Home() {
                 name: "Sarah Mitchell",
                 role: "CEO, TechStart Innovation",
                 quote: "AYAK transformed our office into a space that truly reflects our brand. The attention to detail is exceptional.",
-                image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop"
+                image: "/images/testimonial-1.jpg"
               },
               {
                 name: "James Cooper",

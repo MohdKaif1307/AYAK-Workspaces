@@ -147,7 +147,7 @@ export default function About() {
                 name: "Marcus Thompson",
                 role: "CEO & Chief Operations Officer",
                 bio: "Business leader specialized in scaling design firms and managing complex enterprise projects.",
-                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop"
+                image: "/images/testimonial-2.jpg"
               },
               {
                 name: "Sophie Laurent",

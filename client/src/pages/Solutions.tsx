@@ -8,21 +8,21 @@ export default function Solutions() {
     {
       title: "Corporate Offices",
       description: "Scale your operations with professional layouts designed for large teams. Focus on hierarchy, privacy, and impressive executive suites.",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
+      image: "/images/solutions-corporate.jpg",
       features: ["Executive Suites", "Open Plan Workstations", "Boardrooms"],
       stats: { companies: "500+", satisfaction: "98%", years: "15+" }
     },
     {
       title: "Startups & Tech",
       description: "Agile furniture for agile teams. Flexible, modular systems that can grow and change as fast as your company does.",
-      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop",
+      image: "/images/solutions-startup.jpg",
       features: ["Modular Desks", "Collaboration Hubs", "Phone Booths"],
       stats: { startups: "200+", flexibility: "100%", growth: "250%" }
     },
     {
       title: "Co-working Spaces",
       description: "Maximize density without sacrificing comfort. Durable, versatile furniture built for high-traffic environments.",
-      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop",
+      image: "/images/solutions-coworking.jpg",
       features: ["Hot Desking", "Lounge Areas", "Lockers & Storage"],
       stats: { locations: "300+", members: "50k+", efficiency: "40%" }
     }
