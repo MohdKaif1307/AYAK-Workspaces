@@ -78,7 +78,7 @@ export default function Home() {
                 ))}
               </ul>
               <Link href="/about">
-                <Button variant="link" className="text-primary p-0 h-auto font-semibold text-lg hover:no-underline hover:text-primary/80">
+                <Button variant="ghost" className="text-primary p-0 h-auto font-semibold text-lg hover:no-underline hover:text-primary/80">
                   More about us <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
@@ -92,7 +92,7 @@ export default function Home() {
             >
               <div className="aspect-[4/3] bg-secondary rounded-lg overflow-hidden">
                 <img 
-                  src="/images/featured-section.jpg" 
+                  src="/images/featured-section.png" 
                   alt="Modern Workspace Design" 
                   className="w-full h-full object-cover"
                 />

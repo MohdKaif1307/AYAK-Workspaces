@@ -8,7 +8,7 @@ export default function Solutions() {
     {
       title: "Corporate Offices",
       description: "Scale your operations with professional layouts designed for large teams. Focus on hierarchy, privacy, and impressive executive suites.",
-      image: "/images/solutions-corporate.jpg",
+      image: "/images/solutions-corporate.png",
       features: ["Executive Suites", "Open Plan Workstations", "Boardrooms"],
       stats: { companies: "500+", satisfaction: "98%", years: "15+" }
     },

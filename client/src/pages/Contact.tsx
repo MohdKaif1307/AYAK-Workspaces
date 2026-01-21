@@ -277,7 +277,7 @@ export default function Contact() {
                 name: "Sophie Laurent",
                 role: "Sustainability Consultant",
                 bio: "Focused on eco-friendly materials and sustainable office solutions",
-                image: "/images/testimonial-3.jpg"
+                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400&auto=format&fit=crop"
               }
             ].map((member, idx) => (
               <motion.div 
