@@ -9,9 +9,12 @@ import { Footer } from "@/components/Footer";
 
 // Pages
 import Home from "@/pages/Home";
+import About from "@/pages/About";
 import Products from "@/pages/Products";
 import ProductDetail from "@/pages/ProductDetail";
 import Solutions from "@/pages/Solutions";
+import Services from "@/pages/Services";
+import Features from "@/pages/Features";
 import Contact from "@/pages/Contact";
 import Dashboard from "@/pages/Dashboard";
 import Auth from "@/pages/Auth";
@@ -27,7 +30,9 @@ function Router() {
           <Route path="/products" component={Products} />
           <Route path="/products/:id" component={ProductDetail} />
           <Route path="/solutions" component={Solutions} />
-          <Route path="/about" component={Home} /> {/* Reuse Home for About MVP */}
+          <Route path="/services" component={Services} />
+          <Route path="/features" component={Features} />
+          <Route path="/about" component={About} />
           <Route path="/contact" component={Contact} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/auth" component={Auth} />

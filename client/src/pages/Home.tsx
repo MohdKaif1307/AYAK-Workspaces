@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Award, Users, Zap } from "lucide-react";
 
 export default function Home() {
   const fadeInUp = {
@@ -13,11 +13,11 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-[80vh] min-h-[600px] flex items-center bg-black overflow-hidden">
-        {/* Abstract Background Image */}
-        <div className="absolute inset-0 opacity-60">
+      <section className="relative h-[80vh] min-h-[650px] flex items-center bg-black overflow-hidden">
+        {/* Premium Background Image */}
+        <div className="absolute inset-0 opacity-50">
           <img 
-            src="https://cdn.dribbble.com/userupload/40180972/file/original-0b2fff4cebc03df48f5fa407493d1d71.png?format=webp&resize=1600x1200" 
+            src="/images/hero-home.webp" 
             alt="Modern Office Background" 
             className="w-full h-full object-cover"
           />
@@ -92,8 +92,8 @@ export default function Home() {
             >
               <div className="aspect-[4/3] bg-secondary rounded-lg overflow-hidden">
                 <img 
-                  src="https://www.studiofoxdesign.com/wp-content/uploads/2021/12/Cube-1024x492.jpg" 
-                  alt="Minimalist Furniture" 
+                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2072&auto=format&fit=crop" 
+                  alt="Modern Workspace Design" 
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -117,9 +117,9 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Executive Desks", img: "https://www.ecomva.com/wp-content/uploads/2024/04/furniture-service-banner-1.png", link: "/products?category=desks" },
-              { title: "Ergonomic Seating", img: "https://cxl.com/wp-content/uploads/2023/09/Office-chair-1024x595.jpg", link: "/products?category=chairs" },
-              { title: "Collaborative Spaces", img: "https://images.squarespace-cdn.com/content/v1/58cfd41c17bffcb09bd654f0/1711029298421-HILV7HAUJBJZNDNEMF3Z/Coworking%2B1.png", link: "/products?category=collaborative" }
+              { title: "Executive Desks", img: "https://images.unsplash.com/photo-1593062096033-9a26b09da705?q=80&w=2070&auto=format&fit=crop", link: "/products?category=desks" },
+              { title: "Ergonomic Seating", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop", link: "/products?category=chairs" },
+              { title: "Collaborative Spaces", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop", link: "/products?category=collaborative" }
             ].map((cat, idx) => (
               <Link key={idx} href={cat.link}>
                 <motion.div 
@@ -155,6 +155,113 @@ export default function Home() {
               Start Your Project
             </Button>
           </Link>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="text-primary font-semibold tracking-wider text-sm uppercase">Why AYAK</span>
+            <h2 className="font-display font-bold text-4xl mt-2 mb-4">Experience the Difference</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              We combine sophisticated design with practical functionality to create workspaces that inspire productivity and elegance.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="p-8 bg-secondary/50 rounded-lg border border-border/50 hover:border-primary/50 transition-all"
+            >
+              <Award className="w-12 h-12 text-primary mb-4" />
+              <h3 className="font-display font-bold text-xl mb-3">Award-Winning Design</h3>
+              <p className="text-muted-foreground">
+                Our collections have been recognized by leading design institutions for innovation and aesthetic excellence.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="p-8 bg-secondary/50 rounded-lg border border-border/50 hover:border-primary/50 transition-all"
+            >
+              <Users className="w-12 h-12 text-primary mb-4" />
+              <h3 className="font-display font-bold text-xl mb-3">Expert Consultants</h3>
+              <p className="text-muted-foreground">
+                Our design team works closely with you to understand your vision and deliver tailored solutions that exceed expectations.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="p-8 bg-secondary/50 rounded-lg border border-border/50 hover:border-primary/50 transition-all"
+            >
+              <Zap className="w-12 h-12 text-primary mb-4" />
+              <h3 className="font-display font-bold text-xl mb-3">Premium Quality</h3>
+              <p className="text-muted-foreground">
+                Every piece is crafted with meticulous attention to detail, using sustainable materials and proven manufacturing techniques.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-24 bg-secondary/20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="text-primary font-semibold tracking-wider text-sm uppercase">Client Success</span>
+            <h2 className="font-display font-bold text-4xl mt-2">Trusted by Leading Companies</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Sarah Mitchell",
+                role: "CEO, TechStart Innovation",
+                quote: "AYAK transformed our office into a space that truly reflects our brand. The attention to detail is exceptional.",
+                image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop"
+              },
+              {
+                name: "James Cooper",
+                role: "Operations Director, Global Finance",
+                quote: "Professional, creative, and deeply attentive to our needs. The project was completed on time and within budget.",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop"
+              },
+              {
+                name: "Emma Rodriguez",
+                role: "HR Manager, Enterprise Solutions",
+                quote: "Our team loved the new workspace. Employee satisfaction increased significantly after the redesign.",
+                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop"
+              }
+            ].map((testimonial, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-background p-8 rounded-lg border border-border shadow-sm"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover" />
+                  <div>
+                    <p className="font-semibold">{testimonial.name}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                  </div>
+                </div>
+                <p className="text-muted-foreground italic">"{testimonial.quote}"</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

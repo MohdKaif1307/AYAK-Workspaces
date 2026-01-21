@@ -14,6 +14,8 @@ export function Navbar() {
     { href: "/", label: "Home" },
     { href: "/products", label: "Collections" },
     { href: "/solutions", label: "Solutions" },
+    { href: "/services", label: "Services" },
+    { href: "/features", label: "Features" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ];
@@ -25,10 +27,11 @@ export function Navbar() {
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 bg-primary rounded-sm flex items-center justify-center text-primary-foreground font-display font-bold text-xl group-hover:bg-primary/90 transition-colors">
-            A
-          </div>
-          <span className="font-display font-bold text-2xl tracking-tight">AYAK</span>
+          <img 
+            src="/images/LOGO.png" 
+            alt="AYAK Logo" 
+            className="h-20 w-auto hover:opacity-80 transition-opacity"
+          />
         </Link>
 
         {/* Desktop Nav */}
@@ -37,7 +40,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-primary ${
+              className={`text-base font-semibold transition-colors hover:text-primary ${
                 isActive(link.href) ? "text-primary" : "text-muted-foreground"
               }`}
             >
@@ -57,17 +60,17 @@ export function Navbar() {
           {user ? (
             <div className="flex items-center gap-2">
                <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="hidden sm:flex">
+                <Button variant="ghost" className="hidden sm:flex text-base font-semibold">
                   Dashboard
                 </Button>
                </Link>
-              <Button variant="outline" size="sm" onClick={() => logout()}>
+              <Button variant="outline" className="text-base font-semibold" onClick={() => logout()}>
                 Logout
               </Button>
             </div>
           ) : (
             <Link href="/auth">
-              <Button variant="default" size="sm" className="hidden sm:flex bg-primary text-primary-foreground hover:bg-primary/90">
+              <Button variant="default" className="hidden sm:flex bg-primary text-primary-foreground hover:bg-primary/90 text-base font-semibold">
                 Sign In
               </Button>
             </Link>
