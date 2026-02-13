@@ -46,6 +46,15 @@ export const api = {
         404: errorSchemas.notFound,
       },
     },
+    create: {
+      method: 'POST' as const,
+      path: '/api/products',
+      input: insertProductSchema,
+      responses: {
+        201: z.custom<typeof products.$inferSelect>(),
+        400: errorSchemas.validation,
+      },
+    },
   },
   categories: {
     list: {

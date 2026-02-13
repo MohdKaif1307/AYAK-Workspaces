@@ -26,121 +26,79 @@ export default function Dashboard() {
   const pendingQuotes = quotes?.filter(q => q.status === 'pending').length || 0;
   const approvedQuotes = quotes?.filter(q => q.status === 'approved').length || 0;
 
+  const stats = [
+    { icon: FileText, label: "Total Quotes", value: totalQuotes, color: "text-primary", bg: "bg-primary/10", border: "hover:border-primary/50" },
+    { icon: Clock, label: "Pending Review", value: pendingQuotes, color: "text-amber-600", bg: "bg-amber-500/10", border: "hover:border-amber-500/50" },
+    { icon: CheckCircle2, label: "Approved", value: approvedQuotes, color: "text-green-600", bg: "bg-green-500/10", border: "hover:border-green-500/50" },
+    { icon: Award, label: "Account Status", value: "Premium", color: "text-primary", bg: "bg-primary/10", border: "hover:border-primary/50" },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-secondary/20 to-background">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex justify-between items-start mb-12"
+          className="flex flex-col md:flex-row justify-between items-start gap-4 mb-12"
         >
           <div>
             <h1 className="font-display font-bold text-4xl md:text-5xl mb-2">Welcome back</h1>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-lg text-muted-foreground">
               {user.firstName ? `${user.firstName}, here's your workspace overview` : `${user.email}, here's your overview`}
             </p>
           </div>
           <Link href="/products">
-            <Button size="lg" className="font-semibold">Browse Products</Button>
+            <Button size="lg" className="font-semibold rounded-lg px-8">Browse Products</Button>
           </Link>
         </motion.div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-background p-6 rounded-lg border border-border shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-primary/10 rounded-full text-primary">
-                <FileText className="w-6 h-6" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {stats.map((stat, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.1 }}
+              className={`premium-card p-6 ${stat.border}`}
+            >
+              <div className="flex items-center gap-4">
+                <div className={`p-3 ${stat.bg} rounded-xl`}>
+                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold">{stat.value}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Total Quotes</p>
-                <p className="text-3xl font-bold">{totalQuotes}</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="bg-background p-6 rounded-lg border border-border shadow-sm hover:shadow-md hover:border-yellow-500/50 transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-yellow-500/10 rounded-full text-yellow-600">
-                <Clock className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Pending Review</p>
-                <p className="text-3xl font-bold">{pendingQuotes}</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="bg-background p-6 rounded-lg border border-border shadow-sm hover:shadow-md hover:border-green-500/50 transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-500/10 rounded-full text-green-600">
-                <CheckCircle2 className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Approved</p>
-                <p className="text-3xl font-bold">{approvedQuotes}</p>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="bg-background p-6 rounded-lg border border-border shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-primary/10 rounded-full text-primary">
-                <Award className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Account Status</p>
-                <p className="text-3xl font-bold">Premium</p>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Quote History */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-2 bg-background rounded-lg border border-border shadow-sm overflow-hidden"
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-2 premium-card overflow-hidden"
           >
             <div className="p-6 border-b border-border">
               <h2 className="font-display font-bold text-2xl">Quote History</h2>
               <p className="text-muted-foreground text-sm mt-1">Track and manage all your project quotes</p>
             </div>
-            
+
             {quotes?.length === 0 ? (
               <div className="p-12 text-center">
-                <div className="mb-4 text-4xl">📋</div>
-                <p className="text-muted-foreground mb-4 font-medium">You haven't requested any quotes yet.</p>
-                <p className="text-muted-foreground text-sm mb-6">Start exploring our collections and request a quote for the products you're interested in.</p>
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <FileText className="w-8 h-8 text-primary" />
+                </div>
+                <p className="text-muted-foreground mb-2 font-medium">You haven't requested any quotes yet.</p>
+                <p className="text-muted-foreground text-sm mb-6">Start exploring our collections and request a quote.</p>
                 <Link href="/products">
-                  <Button variant="outline">Start Browsing</Button>
+                  <Button variant="outline" className="rounded-lg">Start Browsing</Button>
                 </Link>
               </div>
             ) : (
@@ -157,23 +115,20 @@ export default function Dashboard() {
                   <tbody className="divide-y divide-border">
                     {quotes?.map((quote) => (
                       <tr key={quote.id} className="hover:bg-secondary/30 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-primary">#{quote.id}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                          {new Date(quote.createdAt!).toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'short', 
-                            day: 'numeric' 
-                          })}
+                        <td className="px-6 py-4 text-sm font-semibold text-primary">#{quote.id}</td>
+                        <td className="px-6 py-4 text-sm text-muted-foreground">
+                          {new Date(quote.createdAt!).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-3 py-1 text-xs font-semibold rounded-full 
-                            ${quote.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                              quote.status === 'approved' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                        <td className="px-6 py-4">
+                          <span className={`px-3 py-1 text-xs font-semibold rounded-full ${quote.status === 'pending' ? 'bg-amber-100 text-amber-800' :
+                              quote.status === 'approved' ? 'bg-green-100 text-green-800' :
+                                'bg-gray-100 text-gray-800'
+                            }`}>
                             {quote.status?.charAt(0).toUpperCase()}{quote.status?.slice(1)}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <Link href={`/quotes/${quote.id}`} className="text-primary hover:text-primary/80 transition-colors">
+                        <td className="px-6 py-4 text-right text-sm">
+                          <Link href={`/quotes/${quote.id}`} className="text-primary hover:text-primary/80 font-medium transition-colors">
                             View Details →
                           </Link>
                         </td>
@@ -186,70 +141,64 @@ export default function Dashboard() {
           </motion.div>
 
           {/* Sidebar */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
             className="space-y-6"
           >
             {/* Quick Actions */}
-            <div className="bg-background rounded-lg border border-border p-6">
+            <div className="premium-card p-6">
               <h3 className="font-semibold text-lg mb-4">Quick Actions</h3>
               <div className="space-y-2">
                 <Link href="/products" className="block">
-                  <Button variant="outline" className="w-full justify-start">
-                    <TrendingUp className="w-4 h-4 mr-2" />
-                    Browse Products
+                  <Button variant="outline" className="w-full justify-start rounded-lg">
+                    <TrendingUp className="w-4 h-4 mr-2" /> Browse Products
                   </Button>
                 </Link>
                 <Link href="/solutions" className="block">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Award className="w-4 h-4 mr-2" />
-                    View Solutions
+                  <Button variant="outline" className="w-full justify-start rounded-lg">
+                    <Award className="w-4 h-4 mr-2" /> View Solutions
                   </Button>
                 </Link>
                 <Link href="/contact" className="block">
-                  <Button className="w-full justify-start">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Request Quote
+                  <Button className="w-full justify-start rounded-lg">
+                    <FileText className="w-4 h-4 mr-2" /> Request Quote
                   </Button>
                 </Link>
               </div>
             </div>
 
             {/* Tips */}
-            <div className="bg-primary/5 border border-primary/20 rounded-lg p-6">
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-6">
               <h3 className="font-semibold text-lg mb-3 text-primary">Pro Tips</h3>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li className="flex gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  <span>Customize your quotes with detailed notes for faster turnaround</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  <span>Compare multiple solutions before making a decision</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-primary font-bold">•</span>
-                  <span>Contact our team for bulk discounts on large projects</span>
-                </li>
+                {[
+                  "Customize your quotes with detailed notes for faster turnaround",
+                  "Compare multiple solutions before making a decision",
+                  "Contact our team for bulk discounts on large projects",
+                ].map((tip, idx) => (
+                  <li key={idx} className="flex gap-2">
+                    <span className="text-primary font-bold shrink-0">•</span>
+                    <span>{tip}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* Account Info */}
-            <div className="bg-background rounded-lg border border-border p-6">
+            <div className="premium-card p-6">
               <h3 className="font-semibold text-lg mb-4">Account</h3>
-              <div className="space-y-2 text-sm">
-                <p>
-                  <span className="text-muted-foreground">Email:</span>
-                  <span className="block font-medium">{user.email}</span>
-                </p>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <span className="text-muted-foreground block text-xs uppercase tracking-wider font-medium mb-1">Email</span>
+                  <span className="font-medium">{user.email}</span>
+                </div>
                 {user.firstName && (
-                  <p>
-                    <span className="text-muted-foreground">Name:</span>
-                    <span className="block font-medium">{user.firstName}</span>
-                  </p>
+                  <div>
+                    <span className="text-muted-foreground block text-xs uppercase tracking-wider font-medium mb-1">Name</span>
+                    <span className="font-medium">{user.firstName}</span>
+                  </div>
                 )}
               </div>
             </div>

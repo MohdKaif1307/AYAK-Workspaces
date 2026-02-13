@@ -1,269 +1,182 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { ArrowRight, Award, Users, Lightbulb, Globe } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import {
+  Award, Users, Heart, Target, Shield, Lightbulb,
+  ArrowRight, Building2, Globe, Leaf
+} from "lucide-react";
+import { useRef, useEffect, useState } from "react";
+
+function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!isInView) return;
+    let start = 0;
+    const duration = 2000;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) { setCount(target); clearInterval(timer); }
+      else { setCount(Math.floor(start)); }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [isInView, target]);
+
+  return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
+}
 
 export default function About() {
+  const values = [
+    { icon: Heart, title: "Passion", desc: "Every piece is designed with love for craftsmanship and an obsession with quality." },
+    { icon: Target, title: "Innovation", desc: "We push boundaries with cutting-edge design and sustainable manufacturing." },
+    { icon: Users, title: "Collaboration", desc: "We work as an extension of your team, deeply understanding your unique needs." },
+    { icon: Shield, title: "Integrity", desc: "Transparent pricing, honest timelines, and commitments we always keep." },
+    { icon: Lightbulb, title: "Creativity", desc: "Unique solutions that transform ordinary spaces into inspiring environments." },
+    { icon: Leaf, title: "Sustainability", desc: "Responsibly sourced materials and eco-conscious processes at every step." },
+  ];
+
+  const team = [
+    { name: "Alexandra Chen", role: "CEO & Founder", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=300&auto=format&fit=crop" },
+    { name: "Marcus Rivera", role: "Head of Design", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop" },
+    { name: "Sarah Kim", role: "Operations Director", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&auto=format&fit=crop" },
+    { name: "David Thompson", role: "Head of Engineering", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=300&auto=format&fit=crop" },
+  ];
+
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative h-[80vh] min-h-[650px] flex items-center bg-black overflow-hidden">
-        <div className="absolute inset-0 opacity-50">
-          <img 
-            src="/images/hero-about.jpg" 
-            alt="Team Background" 
-            className="w-full h-full object-cover"
-          />
+    <div className="min-h-screen bg-background">
+      {/* Hero */}
+      <section className="relative h-[55vh] min-h-[500px] flex items-center overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="/images/hero-about.jpg" alt="About AYAK" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
         </div>
-        
         <div className="container mx-auto px-4 relative z-10 text-white">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-3xl"
-          >
-            <h1 className="font-display font-bold text-5xl md:text-7xl leading-tight mb-6">
-              Transforming Workspaces, Inspiring Excellence
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-3xl">
+            <span className="text-primary font-semibold tracking-widest text-xs uppercase mb-3 block">Our Story</span>
+            <h1 className="font-display font-bold text-5xl md:text-7xl leading-tight mb-4">
+              Designing the Future of Work
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-8 font-light">
-              At AYAK Enterprises, we believe that the design of your workspace shapes the way your team works, thinks, and innovates.
+            <p className="text-lg text-white/70 max-w-xl font-light">
+              Since 2009, we've been transforming workspaces into inspiring environments that drive success.
             </p>
           </motion.div>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent" />
       </section>
 
-      {/* Our Story */}
-      <section className="py-24 bg-background">
+      {/* Story */}
+      <section className="py-28">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="font-display font-bold text-4xl mb-6 text-foreground">
-                Our Story
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+              <span className="text-primary font-semibold tracking-widest text-xs uppercase">Our Journey</span>
+              <h2 className="font-display font-bold text-4xl mt-2 mb-6 leading-tight">
+                From a Vision to an Industry Leader
               </h2>
-              <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-                Founded in 2009, AYAK Enterprises started with a simple mission: to revolutionize how companies approach office design. What began as a small furniture consultation firm has grown into a trusted partner for over 1,000 companies worldwide.
-              </p>
-              <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-                We've spent more than a decade understanding the intersection of design, functionality, and employee wellbeing. Every project taught us something new, and every client challenge pushed us to innovate further.
-              </p>
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                Today, we're proud to have transformed over 5,000 workspaces globally, each one reflecting the unique vision and values of its organization.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="aspect-[4/3] bg-secondary rounded-lg overflow-hidden shadow-lg">
-                <img 
-                  src="/images/about-team.jpg" 
-                  alt="AYAK Workspace" 
-                  className="w-full h-full object-cover"
-                />
+              <div className="space-y-4 text-muted-foreground leading-relaxed">
+                <p>
+                  AYAK was founded with a simple belief: the spaces where people work should inspire their best thinking. What started as a small design studio has grown into a leading workspace solutions company serving businesses across the globe.
+                </p>
+                <p>
+                  Today, we combine timeless craftsmanship with modern innovation, creating furniture that's as functional as it is beautiful. Every piece we create tells a story of quality, sustainability, and thoughtful design.
+                </p>
               </div>
+              <Link href="/contact" className="inline-block mt-8">
+                <Button className="rounded-lg px-8 py-6">
+                  Work With Us <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
             </motion.div>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="relative">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
+                <img src="/images/about-team.jpg" alt="AYAK Team" className="w-full h-full object-cover" />
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-primary/10 rounded-2xl -z-10" />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-white/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { value: 15, suffix: "+", label: "Years Experience", icon: Award },
+              { value: 5000, suffix: "+", label: "Projects Completed", icon: Building2 },
+              { value: 30, suffix: "+", label: "Countries Served", icon: Globe },
+              { value: 98, suffix: "%", label: "Client Satisfaction", icon: Heart },
+            ].map((stat, idx) => (
+              <motion.div key={idx} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="text-center">
+                <stat.icon className="w-6 h-6 mx-auto mb-3 opacity-80" />
+                <div className="text-4xl md:text-5xl font-bold mb-2">
+                  <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                </div>
+                <p className="text-sm opacity-80 font-medium">{stat.label}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Our Values */}
-      <section className="py-24 bg-secondary/20">
+      <section className="py-28 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="font-display font-bold text-4xl mb-4">Our Values</h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              These principles guide everything we do
-            </p>
+            <span className="text-primary font-semibold tracking-widest text-xs uppercase">What Drives Us</span>
+            <h2 className="font-display font-bold text-4xl mt-2">Our Core Values</h2>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                icon: Lightbulb,
-                title: "Innovation",
-                description: "We constantly push boundaries to create furniture solutions that anticipate tomorrow's needs."
-              },
-              {
-                icon: Award,
-                title: "Excellence",
-                description: "Every detail matters. We maintain the highest standards in design, materials, and craftsmanship."
-              },
-              {
-                icon: Users,
-                title: "Collaboration",
-                description: "We work closely with our clients to understand their vision and bring it to life."
-              },
-              {
-                icon: Globe,
-                title: "Sustainability",
-                description: "We're committed to eco-friendly materials and responsible business practices."
-              }
-            ].map((value, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="bg-background p-8 rounded-lg border border-border shadow-sm hover:shadow-md hover:border-primary/50 transition-all"
-              >
-                <value.icon className="w-10 h-10 text-primary mb-4" />
-                <h3 className="font-semibold text-lg mb-3">{value.title}</h3>
-                <p className="text-muted-foreground">{value.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {values.map((value, idx) => (
+              <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="premium-card p-8 group">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
+                  <value.icon className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="font-display font-bold text-xl mb-3">{value.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{value.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-24 bg-background">
+      {/* Leadership Team */}
+      <section className="py-28 bg-secondary/20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="font-display font-bold text-4xl mb-4">Leadership Team</h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Visionary leaders with decades of combined experience in design and business
-            </p>
+            <span className="text-primary font-semibold tracking-widest text-xs uppercase">Meet the Experts</span>
+            <h2 className="font-display font-bold text-4xl mt-2">Leadership Team</h2>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Alexandra Chen",
-                role: "Founder & Chief Design Officer",
-                bio: "Architect with 20+ years of experience in workplace design and organizational development.",
-                image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop"
-              },
-              {
-                name: "Marcus Thompson",
-                role: "CEO & Chief Operations Officer",
-                bio: "Business leader specialized in scaling design firms and managing complex enterprise projects.",
-                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop"
-              },
-              {
-                name: "Sophie Laurent",
-                role: "VP Sustainability & Innovation",
-                bio: "Environmental scientist and designer focused on sustainable materials and ethical manufacturing.",
-                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400&auto=format&fit=crop"
-              }
-            ].map((member, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="text-center"
-              >
-                <div className="mb-4 rounded-lg overflow-hidden w-full aspect-[3/4] shadow-lg">
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {team.map((member, idx) => (
+              <motion.div key={idx} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: idx * 0.1 }} className="group">
+                <div className="aspect-[3/4] rounded-2xl overflow-hidden mb-5 shadow-lg relative">
+                  <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <h3 className="font-semibold text-lg">{member.name}</h3>
-                <p className="text-primary font-medium text-sm mb-3">{member.role}</p>
-                <p className="text-muted-foreground">{member.bio}</p>
+                <p className="text-muted-foreground text-sm">{member.role}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-24 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4">
-          <h2 className="font-display font-bold text-4xl text-center mb-16">By The Numbers</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { label: "Years in Business", value: "15+" },
-              { label: "Workspaces Transformed", value: "5,000+" },
-              { label: "Happy Clients", value: "1,000+" },
-              { label: "Team Members", value: "150+" }
-            ].map((stat, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <div className="text-5xl font-bold mb-2">{stat.value}</div>
-                <p className="opacity-90 font-medium">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Commitment Section */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-display font-bold text-4xl mb-6">Our Commitment to You</h2>
-            <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              We don't just sell furniture. We partner with you to create workspaces that inspire productivity, foster collaboration, and reflect your company's values. Every project is a conversation, every design is a solution, and every workspace is a masterpiece.
-            </p>
-            <p className="text-muted-foreground text-lg mb-12 leading-relaxed">
-              Your success is our success. When your team thrives in a thoughtfully designed space, we thrive too. That's the AYAK promise.
-            </p>
-            
-            <Link href="/contact">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold px-10 py-6 text-lg">
-                  Let's Work Together <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </motion.div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Clients Section */}
-      <section className="py-24 bg-secondary/20">
-        <div className="container mx-auto px-4">
-          <h2 className="font-display font-bold text-4xl text-center mb-4">Trusted by Industry Leaders</h2>
-          <p className="text-muted-foreground text-lg text-center max-w-2xl mx-auto mb-12">
-            We're proud to work with companies of all sizes, from innovative startups to Fortune 500 enterprises.
-          </p>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
-            {[
-              { name: "TechCorp", logo: "TC" },
-              { name: "Global Finance", logo: "GF" },
-              { name: "Creative Co", logo: "CC" },
-              { name: "Innovation Labs", logo: "IL" },
-              { name: "Enterprise Pro", logo: "EP" },
-              { name: "Future Systems", logo: "FS" },
-              { name: "Design Hub", logo: "DH" },
-              { name: "Digital First", logo: "DF" }
-            ].map((client, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.05 }}
-                className="flex items-center justify-center p-6 bg-background rounded-lg border border-border hover:border-primary/50 transition-all"
-              >
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mx-auto mb-2 text-primary font-bold">
-                    {client.logo}
-                  </div>
-                  <p className="text-sm font-medium text-foreground">{client.name}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+      {/* CTA */}
+      <section className="py-28 bg-background">
+        <div className="container mx-auto px-4 text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="font-display font-bold text-4xl mb-6">Ready to Get Started?</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-10">Let our team help you design the perfect workspace for your business.</p>
+            <Link href="/contact"><Button size="lg" className="px-10 py-6 text-base rounded-lg font-semibold">Start a Conversation <ArrowRight className="ml-2 w-5 h-5" /></Button></Link>
+          </motion.div>
         </div>
       </section>
     </div>

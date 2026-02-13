@@ -36,6 +36,143 @@ export interface IStorage {
   createBlogPost(post: any): Promise<BlogPost>;
 }
 
+// In-memory storage for when database is not available
+class InMemoryStorage implements IStorage {
+  private productsList: Map<number, Product> = new Map();
+  private categoriesList: Map<number, Category> = new Map();
+  private quotesList: Map<number, Quote> = new Map();
+  private quoteItemsList: Map<number, QuoteItem> = new Map();
+  private inquiriesList: Map<number, Inquiry> = new Map();
+  private blogPostsList: Map<number, BlogPost> = new Map();
+  private nextProductId = 1;
+  private nextCategoryId = 1;
+  private nextQuoteId = 1;
+  private nextQuoteItemId = 1;
+  private nextInquiryId = 1;
+  private nextBlogPostId = 1;
+
+  async getProducts(categoryId?: number): Promise<Product[]> {
+    const products = Array.from(this.productsList.values());
+    if (categoryId) {
+      return products.filter(p => p.categoryId === categoryId);
+    }
+    return products;
+  }
+
+  async getProduct(id: number): Promise<Product | undefined> {
+    return this.productsList.get(id);
+  }
+
+  async createProduct(product: InsertProduct): Promise<Product> {
+    const id = this.nextProductId++;
+    const newProduct: Product = {
+      ...product,
+      id,
+      createdAt: new Date(),
+    } as Product;
+    this.productsList.set(id, newProduct);
+    return newProduct;
+  }
+
+  async getCategories(): Promise<Category[]> {
+    return Array.from(this.categoriesList.values());
+  }
+
+  async getCategory(id: number): Promise<Category | undefined> {
+    return this.categoriesList.get(id);
+  }
+
+  async getCategoryBySlug(slug: string): Promise<Category | undefined> {
+    for (const category of Array.from(this.categoriesList.values())) {
+      if (category.slug === slug) return category;
+    }
+    return undefined;
+  }
+
+  async createCategory(category: Category): Promise<Category> {
+    const id = this.nextCategoryId++;
+    const newCategory: Category = { ...category, id } as Category;
+    this.categoriesList.set(id, newCategory);
+    return newCategory;
+  }
+
+  async createQuote(userId: string | null, items: InsertQuoteItem[]): Promise<Quote> {
+    const id = this.nextQuoteId++;
+    const quote: Quote = {
+      id,
+      userId: userId || undefined,
+      status: 'pending',
+      createdAt: new Date(),
+    } as Quote;
+    this.quotesList.set(id, quote);
+
+    for (const item of items) {
+      const itemId = this.nextQuoteItemId++;
+      const quoteItem: QuoteItem = {
+        ...item,
+        id: itemId,
+        quoteId: id,
+      } as QuoteItem;
+      this.quoteItemsList.set(itemId, quoteItem);
+    }
+
+    return quote;
+  }
+
+  async getQuotes(userId: string): Promise<Quote[]> {
+    const userQuotes = Array.from(this.quotesList.values())
+      .filter(q => q.userId === userId)
+      .sort((a, b) => {
+        const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return bTime - aTime;
+      });
+    return userQuotes;
+  }
+
+  async getQuote(id: number): Promise<Quote | undefined> {
+    return this.quotesList.get(id);
+  }
+
+  async createInquiry(inquiry: Inquiry): Promise<Inquiry> {
+    const id = this.nextInquiryId++;
+    const newInquiry: Inquiry = {
+      ...inquiry,
+      id,
+      createdAt: new Date(),
+    } as Inquiry;
+    this.inquiriesList.set(id, newInquiry);
+    return newInquiry;
+  }
+
+  async getBlogPosts(): Promise<BlogPost[]> {
+    return Array.from(this.blogPostsList.values())
+      .sort((a, b) => {
+        const aTime = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+        const bTime = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        return bTime - aTime;
+      });
+  }
+
+  async getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
+    for (const post of Array.from(this.blogPostsList.values())) {
+      if (post.slug === slug) return post;
+    }
+    return undefined;
+  }
+
+  async createBlogPost(post: any): Promise<BlogPost> {
+    const id = this.nextBlogPostId++;
+    const newPost: BlogPost = {
+      ...post,
+      id,
+      publishedAt: new Date(),
+    } as BlogPost;
+    this.blogPostsList.set(id, newPost);
+    return newPost;
+  }
+}
+
 export class DatabaseStorage implements IStorage {
   async getProducts(categoryId?: number): Promise<Product[]> {
     if (categoryId) {
@@ -118,4 +255,4 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = db ? new DatabaseStorage() : new InMemoryStorage();

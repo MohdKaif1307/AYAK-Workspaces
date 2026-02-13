@@ -1,12 +1,14 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { ScrollToTop } from "@/components/ScrollToTop";
+import { ScrollToTop, BackToTop } from "@/components/ScrollToTop";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 // Pages
 import Home from "@/pages/Home";
@@ -21,27 +23,46 @@ import Dashboard from "@/pages/Dashboard";
 import Auth from "@/pages/Auth";
 import NotFound from "@/pages/NotFound";
 
+function AnimatedPage({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 function Router() {
+  const [location] = useLocation();
+
   return (
     <div className="flex flex-col min-h-screen">
       <ScrollToTop />
+      <ScrollProgress />
       <Navbar />
       <main className="flex-1">
-        <Switch>
-          <Route path="/" component={Home} />
-          <Route path="/products" component={Products} />
-          <Route path="/products/:id" component={ProductDetail} />
-          <Route path="/solutions" component={Solutions} />
-          <Route path="/services" component={Services} />
-          <Route path="/features" component={Features} />
-          <Route path="/about" component={About} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/auth" component={Auth} />
-          <Route component={NotFound} />
-        </Switch>
+        <AnimatePresence mode="wait">
+          <Switch key={location}>
+            <Route path="/">{() => <AnimatedPage><Home /></AnimatedPage>}</Route>
+            <Route path="/products">{() => <AnimatedPage><Products /></AnimatedPage>}</Route>
+            <Route path="/products/:id">{() => <AnimatedPage><ProductDetail /></AnimatedPage>}</Route>
+            <Route path="/solutions">{() => <AnimatedPage><Solutions /></AnimatedPage>}</Route>
+            <Route path="/services">{() => <AnimatedPage><Services /></AnimatedPage>}</Route>
+            <Route path="/features">{() => <AnimatedPage><Features /></AnimatedPage>}</Route>
+            <Route path="/about">{() => <AnimatedPage><About /></AnimatedPage>}</Route>
+            <Route path="/contact">{() => <AnimatedPage><Contact /></AnimatedPage>}</Route>
+            <Route path="/dashboard">{() => <AnimatedPage><Dashboard /></AnimatedPage>}</Route>
+            <Route path="/auth">{() => <AnimatedPage><Auth /></AnimatedPage>}</Route>
+            <Route>{() => <AnimatedPage><NotFound /></AnimatedPage>}</Route>
+          </Switch>
+        </AnimatePresence>
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }
