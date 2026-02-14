@@ -90,12 +90,15 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || "5000", 10);
-  const host = "0.0.0.0";
+  // On Windows, binding to 0.0.0.0 can cause ENOTSUP.
+  // We strictly bind to 0.0.0.0 only if the HOST env var is set, otherwise let Node choose.
+  const host = process.env.HOST || undefined;
+
   httpServer.listen(
     {
       port,
       host,
-      reusePort: process.env.NODE_ENV === "production",
+      reusePort: false, // process.env.NODE_ENV === "production" (ENOTSUP on Windows)
     },
     () => {
       log(`serving on port ${port}`);

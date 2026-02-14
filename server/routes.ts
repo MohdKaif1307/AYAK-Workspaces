@@ -18,7 +18,7 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  
+
   // Setup Auth
   await setupAuth(app);
   registerAuthRoutes(app);
@@ -64,7 +64,7 @@ export async function registerRoutes(
     if (!req.isAuthenticated()) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    
+
     try {
       const input = z.object({
         items: z.array(z.object({
@@ -78,7 +78,7 @@ export async function registerRoutes(
       const quote = await storage.createQuote(userId, input.items);
       res.status(201).json(quote);
     } catch (err) {
-        console.error(err);
+      console.error(err);
       if (err instanceof z.ZodError) {
         res.status(400).json({ message: err.errors[0].message });
       } else {
@@ -118,12 +118,8 @@ export async function registerRoutes(
 }
 
 async function seedDatabase() {
-  const categories = await storage.getCategories();
-  if (categories.length > 0) return;
+  const existingCategories = await storage.getCategories();
 
-  console.log("Seeding database...");
-
-  const createdCategories = [];
   const cats = [
     { name: "Workstations", slug: "workstations", imageUrl: "https://www.officefurniturecenter.com/media/wysiwyg/components-of-a-workstaton.jpg" },
     { name: "Office Chairs", slug: "office-chairs", imageUrl: "https://cxl.com/wp-content/uploads/2023/09/Office-chair-1024x595.jpg" },
@@ -133,10 +129,16 @@ async function seedDatabase() {
     { name: "Sofas", slug: "sofas", imageUrl: "https://www.ecomva.com/wp-content/uploads/2024/04/furniture-service-banner-1.png" },
   ];
 
+  // Sync categories
   for (const c of cats) {
-    const newCat = await storage.createCategory(c as any);
-    createdCategories.push(newCat);
+    if (!existingCategories.find(ec => ec.slug === c.slug)) {
+      console.log(`Seeding category: ${c.name}`);
+      await storage.createCategory(c as any);
+    }
   }
+
+  // Get fresh list of categories with IDs
+  const allCategories = await storage.getCategories();
 
   // Add some products
   const products = [
@@ -144,7 +146,7 @@ async function seedDatabase() {
       name: "ErgoOne Task Chair",
       description: "High-performance ergonomic chair with mesh back and adjustable lumbar support.",
       price: 1500000, // 15,000.00
-      categoryId: createdCategories.find(c => c.slug === "office-chairs")?.id,
+      categoryId: allCategories.find(c => c.slug === "office-chairs")?.id,
       imageUrl: "https://cxl.com/wp-content/uploads/2023/09/Office-chair-1024x595.jpg",
       isCustomizable: true,
       specifications: { "Backrest": "Mesh", "Base": "Nylon", "Warranty": "5 Years" }
@@ -153,7 +155,7 @@ async function seedDatabase() {
       name: "Modular Workstation 4-Person",
       description: "Scalable workstation system designed for collaborative teams.",
       price: 4500000,
-      categoryId: createdCategories.find(c => c.slug === "workstations")?.id,
+      categoryId: allCategories.find(c => c.slug === "workstations")?.id,
       imageUrl: "https://www.officefurniturecenter.com/media/wysiwyg/components-of-a-workstaton.jpg",
       isCustomizable: true,
       specifications: { "Dimensions": "1200x600mm per seat", "Material": "Engineered Wood" }
@@ -162,18 +164,21 @@ async function seedDatabase() {
       name: "Executive Desk Elite",
       description: "Premium executive desk with integrated cable management and leather pad.",
       price: 8500000,
-      categoryId: createdCategories.find(c => c.slug === "executive")?.id,
+      categoryId: allCategories.find(c => c.slug === "executive")?.id,
       imageUrl: "https://cdn.dribbble.com/userupload/32922234/file/original-02d0ac6da863f0278ae68bda9b65191c.png?format=webp&resize=400x300&vertical=center",
       isCustomizable: true,
       specifications: { "Finish": "Walnut Veneer", "Width": "1800mm" }
     }
   ];
 
+  const existingProducts = await storage.getProducts();
+
   for (const p of products) {
-    if (p.categoryId) {
-        await storage.createProduct(p as any);
+    if (!existingProducts.find(ep => ep.name === p.name) && p.categoryId) {
+      console.log(`Seeding product: ${p.name}`);
+      await storage.createProduct(p as any);
     }
   }
 
-  console.log("Database seeded successfully.");
+  console.log("Database seeding completed.");
 }
