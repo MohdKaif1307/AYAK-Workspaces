@@ -23,6 +23,31 @@ export async function registerRoutes(
   await setupAuth(app);
   registerAuthRoutes(app);
 
+  // --- Debug Route ---
+  app.get("/api/debug", async (_req, res) => {
+    try {
+      const categoriesCount = (await storage.getCategories()).length;
+      const productsCount = (await storage.getProducts()).length;
+      res.json({
+        status: "ok",
+        dbConnected: !!storage,
+        isDatabaseStorage: storage instanceof (await import("./storage")).DatabaseStorage,
+        counts: { categories: categoriesCount, products: productsCount },
+        env: process.env.NODE_ENV,
+        hasDbUrl: !!process.env.DATABASE_URL,
+      });
+    } catch (err: any) {
+      console.error("Debug Route Error:", err);
+      res.status(500).json({
+        status: "error",
+        message: err.message,
+        stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+        env: process.env.NODE_ENV,
+        hasDbUrl: !!process.env.DATABASE_URL,
+      });
+    }
+  });
+
   // --- API Routes ---
 
   // Products
