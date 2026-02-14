@@ -136,8 +136,10 @@ export async function registerRoutes(
     }
   });
 
-  // Seed Data
-  await seedDatabase();
+  // Seed Data (non-blocking in development/production)
+  seedDatabase().catch(err => {
+    console.error("Database seeding failed:", err);
+  });
 
   return httpServer;
 }

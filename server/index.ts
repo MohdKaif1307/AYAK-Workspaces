@@ -107,10 +107,12 @@ const startServer = async () => {
 };
 
 // Start server if this file is run directly (not imported)
-// In ES modules, we can check import.meta.url or similar, but since we compile to CJS or run with tsx...
-// A common pattern in Vite/TSX projects:
-if (process.env.VITE_PUBLIC_APP_ID || process.argv[1] === new URL(import.meta.url).pathname || process.argv[1].endsWith('index.ts')) {
-  startServer();
+const isMainModule = process.argv[1]?.endsWith('index.ts') || process.argv[1]?.endsWith('index.cjs');
+if (isMainModule && !process.env.VERCEL) {
+  startServer().catch(err => {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  });
 }
 
 export { app, httpServer, startServer };
