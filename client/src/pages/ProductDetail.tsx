@@ -1,5 +1,6 @@
-import { useRoute, Link } from "wouter";
-import { useProduct, useCreateQuote } from "@/hooks/use-products";
+import { Link, useRoute } from "wouter";
+import { useProduct } from "@/hooks/use-products";
+import { useQuote } from "@/context/QuoteContext";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Loader2, Star, ShoppingBag, Heart, ChevronRight, CheckCircle2, ArrowRight, Shield, Truck, RefreshCw } from "lucide-react";
@@ -10,8 +11,7 @@ import { useState, useEffect, useRef } from "react";
 export default function ProductDetail() {
   const [, params] = useRoute("/products/:id");
   const { data: product, isLoading, error } = useProduct(Number(params?.id));
-  const { mutate: createQuote } = useCreateQuote();
-  const { toast } = useToast();
+  const { addToQuote } = useQuote();
   const [quantity, setQuantity] = useState(1);
   const [isSaved, setIsSaved] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -52,17 +52,7 @@ export default function ProductDetail() {
   }
 
   const handleAddToQuote = () => {
-    createQuote(
-      { items: [{ productId: product.id, quantity }] },
-      {
-        onSuccess: () => {
-          toast({ title: "Added to Quote!", description: `${product.name} has been added to your quote request.` });
-        },
-        onError: () => {
-          toast({ title: "Error", description: "Failed to add to quote. Please try again.", variant: "destructive" });
-        },
-      }
-    );
+    addToQuote(product, quantity);
   };
 
   const rating = 4;
@@ -141,8 +131,8 @@ export default function ProductDetail() {
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
                   className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 ${selectedImage === idx
-                      ? 'border-primary shadow-md scale-105'
-                      : 'border-border/30 hover:border-primary/50 opacity-60 hover:opacity-100'
+                    ? 'border-primary shadow-md scale-105'
+                    : 'border-border/30 hover:border-primary/50 opacity-60 hover:opacity-100'
                     }`}
                 >
                   <img src={img} alt={`${product.name} view ${idx + 1}`} className="w-full h-full object-cover" />

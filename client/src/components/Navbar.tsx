@@ -6,6 +6,7 @@ import { Menu, User, ShoppingBag, ChevronRight, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
+import { useQuote } from "@/context/QuoteContext";
 
 export function Navbar() {
   const [location] = useLocation();
@@ -13,6 +14,7 @@ export function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { resolvedTheme, toggleTheme } = useTheme();
+  const { itemCount } = useQuote();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -103,6 +105,27 @@ export function Navbar() {
               </motion.div>
             </AnimatePresence>
           </motion.button>
+
+          {/* Quote Button */}
+          <Link href="/quote">
+            <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-colors">
+              <ShoppingBag className="w-5 h-5 text-muted-foreground" />
+              <AnimatePresence>
+                {itemCount > 0 && (
+                  <motion.span
+                    key="badge"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground"
+                  >
+                    {itemCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </Button>
+          </Link>
+
           {user ? (
             <div className="hidden sm:flex items-center gap-2">
               <Link href="/dashboard">

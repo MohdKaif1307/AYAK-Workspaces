@@ -21,7 +21,9 @@ import Features from "@/pages/Features";
 import Contact from "@/pages/Contact";
 import Dashboard from "@/pages/Dashboard";
 import Auth from "@/pages/Auth";
+import Quote from "@/pages/Quote";
 import NotFound from "@/pages/NotFound";
+import { QuoteProvider } from "@/context/QuoteContext";
 
 function AnimatedPage({ children }: { children: React.ReactNode }) {
   return (
@@ -57,6 +59,7 @@ function Router() {
             <Route path="/contact">{() => <AnimatedPage><Contact /></AnimatedPage>}</Route>
             <Route path="/dashboard">{() => <AnimatedPage><Dashboard /></AnimatedPage>}</Route>
             <Route path="/auth">{() => <AnimatedPage><Auth /></AnimatedPage>}</Route>
+            <Route path="/quote">{() => <AnimatedPage><Quote /></AnimatedPage>}</Route>
             <Route>{() => <AnimatedPage><NotFound /></AnimatedPage>}</Route>
           </Switch>
         </AnimatePresence>
@@ -71,8 +74,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Router />
-        <Toaster />
+        <QuoteProvider>
+          <Router />
+          <Toaster />
+        </QuoteProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
