@@ -17,15 +17,17 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    fs: {
+      strict: true,
+      deny: ["**/.*"],
+    },
+    // Proxy API requests to backend server
     proxy: {
       "/api": {
         target: "http://localhost:5000",
         changeOrigin: true,
+        secure: false,
       },
-    },
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
     },
   },
 });

@@ -1,12 +1,12 @@
-import { 
+import {
   products, categories, quotes, quoteItems, inquiries, blogPosts,
   type Product, type InsertProduct,
-  type Category, 
-  type Quote, 
+  type Category,
+  type Quote,
   type QuoteItem, type InsertQuoteItem,
   type Inquiry,
   type BlogPost
-} from "@shared/schema";
+} from "../shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
 
@@ -15,12 +15,12 @@ export interface IStorage {
   getProducts(categoryId?: number): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
-  
+
   // Categories
   getCategories(): Promise<Category[]>;
   getCategory(id: number): Promise<Category | undefined>;
   getCategoryBySlug(slug: string): Promise<Category | undefined>;
-  createCategory(category: Category): Promise<Category>; 
+  createCategory(category: Category): Promise<Category>;
 
   // Quotes
   createQuote(userId: string | null, items: InsertQuoteItem[]): Promise<Quote>;

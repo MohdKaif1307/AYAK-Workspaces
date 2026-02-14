@@ -107,8 +107,8 @@ export default function Products() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={`px-4 py-2 rounded-full font-medium text-sm whitespace-nowrap transition-all ${category === "all"
-                  ? "bg-primary text-primary-foreground shadow-md"
-                  : "bg-background/50 text-foreground hover:bg-background border border-border/50"
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "bg-background/50 text-foreground hover:bg-background border border-border/50"
                 }`}
               onClick={() => setCategory("all")}
             >
@@ -124,8 +124,8 @@ export default function Products() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.05 }}
                 className={`px-4 py-2 rounded-full font-medium text-sm whitespace-nowrap transition-all ${category === String(cat.id)
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "bg-background/50 text-foreground hover:bg-background border border-border/50"
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "bg-background/50 text-foreground hover:bg-background border border-border/50"
                   }`}
                 onClick={() => setCategory(String(cat.id))}
               >
