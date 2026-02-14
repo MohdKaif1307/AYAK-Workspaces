@@ -59,7 +59,7 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
+const startServer = async () => {
   await registerRoutes(httpServer, app);
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
@@ -104,4 +104,13 @@ app.use((req, res, next) => {
       log(`serving on port ${port}`);
     },
   );
-})();
+};
+
+// Start server if this file is run directly (not imported)
+// In ES modules, we can check import.meta.url or similar, but since we compile to CJS or run with tsx...
+// A common pattern in Vite/TSX projects:
+if (process.env.VITE_PUBLIC_APP_ID || process.argv[1] === new URL(import.meta.url).pathname || process.argv[1].endsWith('index.ts')) {
+  startServer();
+}
+
+export { app, httpServer, startServer };
